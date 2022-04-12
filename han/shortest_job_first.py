@@ -64,16 +64,7 @@ def calculate_waitingtime(
 def calculate_turnaroundtime(
     burst_time: list[int], no_of_processes: int, waiting_time: list[int]
 ) -> list[int]:
-    """
-    Calculate the turn around time of each Processes
-    Return: list of turn around times.
-    >>> calculate_turnaroundtime([3,3,5,1], 4, [0,3,5,0])
-    [3, 6, 10, 1]
-    >>> calculate_turnaroundtime([3,3], 2, [0,3])
-    [3, 6]
-    >>> calculate_turnaroundtime([8,10,1], 3, [1,0,3])
-    [9, 10, 4]
-    """
+
     turn_around_time = [0] * no_of_processes
     for i in range(no_of_processes):
         turn_around_time[i] = burst_time[i] + waiting_time[i]
