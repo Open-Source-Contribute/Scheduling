@@ -11,18 +11,22 @@ import pandas as pd
 def calculate_waitingtime(
     arrival_time: list[int], burst_time: list[int], no_of_processes: int
 ) -> list[int]:
+    """
+    Arrival_time : 도착시간을 담은 리스트
+    Burst_time : 수행시간
+    No_of_processes : 프로세스의 개수
+    ->list[int] : list를 반환합니다.
+    즉 위 함수는 도착시간, 수행시간, 프로세스의 개수를 인자로 받아 각각의 대기시간에 대해 리스트에 저장하여 반환합니다.
+    """
     remaining_time = [0] * no_of_processes
     waiting_time = [0] * no_of_processes
-    # Copy the burst time into remaining_time[]
     for i in range(no_of_processes):
         remaining_time[i] = burst_time[i]
-
     complete = 0
     increment_time = 0
     minm = 999999999
     short = 0
     check = False
-
     # Process until all processes are completed
     while complete != no_of_processes:
         for j in range(no_of_processes):
@@ -32,7 +36,11 @@ def calculate_waitingtime(
                         minm = remaining_time[j]
                         short = j
                         check = True
-
+    """
+    위 코드는 SJF의 필수부분 현재 도착한 프로그램 중에
+    가장 짧은 burst time을 가지는 프로세스를 정하여
+    수행시간을 구하는 코드이다.
+    """
         if not check:
             increment_time += 1
             continue
@@ -55,7 +63,10 @@ def calculate_waitingtime(
 
             if waiting_time[short] < 0:
                 waiting_time[short] = 0
-
+    """
+    종료시간과 도착시간을 뺀 후에 그 값에
+    각각의 수행시간을 빼게 되면, 각각의 대기 시간이 구해진다.
+    """
         # Increment time
         increment_time += 1
     return waiting_time
@@ -69,24 +80,16 @@ def calculate_turnaroundtime(
     for i in range(no_of_processes):
         turn_around_time[i] = burst_time[i] + waiting_time[i]
     return turn_around_time
-
+    """
+    Burst_time : 프로세스 작동시간
+    No_of_processes : 프로세스 갯수
+    Wating_time : 프로세스 대기 시간
+    종료시간을 알려주는 함수로서, 각 프로세스가 언제 종료되는지 리스트 값으로 반환해 준다.
+    """
 
 def calculate_average_times(
     waiting_time: list[int], turn_around_time: list[int], no_of_processes: int
 ) -> None:
-    """
-    This function calculates the average of the waiting & turnaround times
-    Prints: Average Waiting time & Average Turn Around Time
-    >>> calculate_average_times([0,3,5,0],[3,6,10,1],4)
-    Average waiting time = 2.00000
-    Average turn around time = 5.0
-    >>> calculate_average_times([2,3],[3,6],2)
-    Average waiting time = 2.50000
-    Average turn around time = 4.5
-    >>> calculate_average_times([10,4,3],[2,7,6],3)
-    Average waiting time = 5.66667
-    Average turn around time = 5.0
-    """
     total_waiting_time = 0
     total_turn_around_time = 0
     for i in range(no_of_processes):
@@ -94,7 +97,9 @@ def calculate_average_times(
         total_turn_around_time = total_turn_around_time + turn_around_time[i]
     print("Average waiting time = %.5f" % (total_waiting_time / no_of_processes))
     print("Average turn around time =", total_turn_around_time / no_of_processes)
-
+    """
+    각 리스트에 평균을 구하여 print함수로 사용자에게 결과값을 보여줍니다.
+    """
 
 if __name__ == "__main__":
     print("Enter how many process you want to analyze")
