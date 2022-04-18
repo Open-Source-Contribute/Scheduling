@@ -216,46 +216,47 @@ def SJF(ready_queue, waiting_queue):
     return terminated
 
 def round_robin(ready_queue, waiting_queue, quantum_time, time=0, cpu_util=0):
-    terminated = []
+    terminated = [] # 완료된 프로세스 목록
     next_ready = deque()
     next_waiting = []
     while(len(ready_queue) != 0 or len(waiting_queue) != 0):
-        process = ready_queue.popleft()    
+        process = ready_queue.popleft() # ready_queue에서 가장 앞에 있는 프로세스 수행
         
+        # 프로세스가 종료되지 않았다면
         if not process.complete:
-            #update process
+            # 프로세스의 response time을 업데이트
             if(process.response_time == -1):
                 process.response_time = time
-            #print(process.i)           
+            # 프로세스의 남은 수행시간이 time slice(기준 시간)보다 큰 경우
             if(process.burst_times[process.i] > quantum_time):
-                process.burst_times[process.i] -= quantum_time
-                time += quantum_time # a burst
-                cpu_util += quantum_time
-                ready_queue.append(process)
-                update_waiting(waiting_queue, ready_queue, quantum_time)
-                update_waiting(next_waiting, next_ready, quantum_time)
+                process.burst_times[process.i] -= quantum_time # 남은 수행 시간에서 time slice(기준 시간)만큼 차감
+                time += quantum_time # 시간을 time slice(기준 시간)만큼 업데이트
+                cpu_util += quantum_time # cpu_util 업데이트
+                ready_queue.append(process) # 다시 ready_queue의 맨 뒤로 프로세스를 보냄
+                update_waiting(waiting_queue, ready_queue, quantum_time) # 남은 수행 시간 및 대기 시간 업데이트
+                update_waiting(next_waiting, next_ready, quantum_time) # 남은 수행 시간 및 대기 시간 업데이트
             else:
-                time += process.burst_times[process.i] # a burst
-                cpu_util += process.burst_times[process.i]
-                update_waiting(waiting_queue, ready_queue, process.burst_times[process.i])
-                update_waiting(next_waiting, next_ready, process.burst_times[process.i])
-                process.i += 1
+                # 프로세스의 남은 수행시간이 time slcie(기준 시간)보다 작은 경우, time slice 안에 프로세스가 수행 완료되는 경우
+                time += process.burst_times[process.i]  # 남은 수행시간만큼 시간 업데이트
+                cpu_util += process.burst_times[process.i] # cpu_util 업데이트
+                update_waiting(waiting_queue, ready_queue, process.burst_times[process.i]) # 남은 수행 시간 및 대기 시간 업데이트
+                update_waiting(next_waiting, next_ready, process.burst_times[process.i]) # 남은 수행 시간 및 대기 시간 업데이트
+                process.i += 1 # 프로세스의 일부분 수행 시간이 종료됐으므로 해당 프로세스의 다음 부분 작업으로 포인터 이동
                     
             
-                if(process.i >= process.length): 
-                    process.complete = True
-                    process.turn_around_time = time 
-                    terminated.append(process)
-                    #print("process: ", process.i, process.turn_around_time)
-                    #that there are no more bursts to compute=>finished
-                else:
-                    
+                if(process.i >= process.length): # 프로세스의 모든 작업이 수행이 완료되면
+                    process.complete = True # 완료됐다고 저장
+                    process.turn_around_time = time  # 소요시간 저장
+                    terminated.append(process) # 완료된 항목에 현재 프로세스 저장
+                else: # 아직 프로세스의 작업이 남아있을 경우
+                    add_to_waiting(next_waiting, process) # waiting_queue에 프로세스 삽입
+                    view_ready(ready_queue)   # 결과 확인용 출력
+                    view_waiting(waiting_queue) # 결과 확인용 출력
     
-                    add_to_waiting(next_waiting, process)
-                    view_ready(ready_queue)  
-                    view_waiting(waiting_queue)
-    
-    return (next_waiting, next_ready, time, cpu_util)
+    return (next_waiting, next_ready, time, cpu_util) 
+    # MLFQ는 Time Slice만큼 CPU를 차지하고 난 후 큐의 위치가 변경(우선순위가 변경)되기 때문에 
+    # waiting_queue(이전 큐에서 Time Slice를 다 쓰고 내려온 프로세스들) => next_waiting(현재 큐에서 Time Slice를 다 쓰고 내리는 프로세스들)
+    # 위의 로직을 위해 해당 프로세스들의 목록을 return해준다.
 
 def MLFQ(ready_queue, waiting_queue):
     waiting_queue, ready_queue, time, cpu_util = round_robin(ready_queue,waiting_queue, 5, 0)
