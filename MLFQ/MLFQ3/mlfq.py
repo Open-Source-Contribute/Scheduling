@@ -125,48 +125,40 @@ def view_waiting(waiting_queue):
     print("END")
 
               
-# FCFS is an operating system scheduling algorithm that automatically
-#executes queued requests and processes by order of their arrival
-def FCFS(ready_queue, waiting_queue,time=0,cpu_util = 0):
-    #cpu_util = 0
+def FCFS(ready_queue, waiting_queue,time=0):
     terminated = []
+    # 모든 프로세스들이 끝날때까지 실행
     while(completionTest(ready_queue, waiting_queue)):
+        # ready_queue에 프로세스가 없을 때(수행할 프로세스가 없을 때)
         if len(ready_queue) == 0:
-            time+=1
-            update_waiting(waiting_queue, ready_queue, 1)
+            time+=1 # 시간 증가
+            update_waiting(waiting_queue, ready_queue, 1) # waiting_time(대기시간 1 증가)
         else:
-            process = ready_queue.popleft()    
+            # 수행할 프로세스가 있을 때
+            process = ready_queue.popleft()  
             
+            # 해당 프로세스가 수행 완료 되었는지 판단
             if not process.complete:
-                #update process
+                # response time을 현재 시간으로 수정
                 if(process.response_time == -1):
                     process.response_time = time
-                #print(process.i)           
-                
-                time += process.burst_times[process.i] # a burst
-                cpu_util += process.burst_times[process.i]
-##                if len(ready_queue) != 0 : 
-##                    ready_queue[0].waiting_time = process.waiting_time + process.burst_times[process.i]
-                update_waiting(waiting_queue, ready_queue, process.burst_times[process.i])
-                process.i += 1
                         
                 
-                if(process.i >= process.length): 
-                    process.complete = True
-                    process.turn_around_time = time 
-                    terminated.append(process)
-                    #print("process: ", process.i, process.turn_around_time)
-                    #that there are no more bursts to compute=>finished
-                else:
-                    
-                    #idle_time += process.burst_times[process.i]
-                    add_to_waiting(waiting_queue, process)
-                    view_ready(ready_queue)  
-                    view_waiting(waiting_queue)
-    print("total time:", time)
+                time += process.burst_times[process.i] # 수행 시간 만큼 현재 시간을 증가
+                cpu_util += process.burst_times[process.i]
 
-    cpu_util_percent = (cpu_util/time)*100
-    print("cpu utilization %: ", cpu_util_percent)
+                update_waiting(waiting_queue, ready_queue, process.burst_times[process.i]) # waiting_time(대기시간을 수행시간만큼 증가)
+                process.i += 1 # 프로세스의 다음 burst로 이동
+                        
+                # 한 프로세스의 모든 burst들을 끝냈을 때
+                if(process.i >= process.length): 
+                    process.complete = True # 완료됐다고 표시
+                    process.turn_around_time = time # 소요시간을 현재 시간으로 설정
+                    terminated.append(process) # 완료된 프로세스 목록에 저장
+                else:
+                    add_to_waiting(waiting_queue, process) # waiting_time 업데이트
+                    
+    print("total time:", time) # 총 소요시간 체크
     
     return terminated
 
@@ -249,17 +241,15 @@ def round_robin(ready_queue, waiting_queue, quantum_time, time=0, cpu_util=0):
                     #print("process: ", process.i, process.turn_around_time)
                     #that there are no more bursts to compute=>finished
                 else:
-                    
-    
                     add_to_waiting(next_waiting, process)
                     view_ready(ready_queue)  
                     view_waiting(waiting_queue)
     
-    return (next_waiting, next_ready, time, cpu_util)
+    return (next_waiting, next_ready, time, cpu_util) # 
 
 def MLFQ(ready_queue, waiting_queue):
     waiting_queue, ready_queue, time, cpu_util = round_robin(ready_queue,waiting_queue, 5, 0)
-    waiting_queue, ready_queue, time, cpu_util = round_robin(ready_queue,waiting_queue, 10, time, cpu_util)
+    waiting_queue, ready_queue, time, cpu_util = round_robin(ready_queue,waiting_queue, 10, time)
     return FCFS(ready_queue, waiting_queue, time, cpu_util)
 
 
