@@ -12,19 +12,45 @@ import pandas as pd
 from statistics import mean
 
 # Calculate the waiting time of each processes
+"""
+   Arrival_time : 도착 시간을 담은 리스트
+   Burst_time : 수행시간
+   No_of_processes : 프로세스의 개수, the number of processes
+"""
 def calculate_waitingtime(
     arrival_time: list[int], burst_time: list[int], no_of_processes: int
 ) -> list[int]:
-
+    """
+    waiting_time : 대기 시간
+    remaining_time : 남은 수행 시간
+    """
     waiting_time = [0] * no_of_processes
     remaining_time = [0] * no_of_processes
+
+    """
+    Initialize remaining_time to waiting_time.
+    남은 수행 시간을 수행 시간으로 초기화한다.  
+    """
     for i in range(no_of_processes):
         remaining_time[i] = burst_time[i]
     ready_process = []
 
-    completed = 0   # The number of processes completed
+    """
+    completed : 수행 완료된 프로세스의 수, The number of processes completed  
+    total_time : 프로세스와 무관하게 진행되는 시간
+    """
+    completed = 0
     total_time = 0
 
+    """
+    수행할 프로세스가 남아 있을 때, 
+        도착 시간이 지났고 남아 있는 수행 시간이 있는 프로세스는 ready_process에 들어간다.
+        ready_process에서 가장 짧은 프로세스인 target_process가 실행된다. 
+        
+    When processes are not completed,
+        A process whose arrival time has passed and has remaining execution time is put into the ready_process.
+        The shortest process in the ready_process, target_process is executed.
+    """
     while completed != no_of_processes:
         ready_process = []
         target_process = -1
@@ -66,6 +92,10 @@ if __name__ == "__main__":
     arrival_time = [0] * no_of_processes
     processes = list(range(1, no_of_processes + 1))
 
+    """
+    Please note arrival time and burst
+    Please use spaces to separate times entered.
+    """
     for i in range(no_of_processes):
         print("Enter the arrival time and burst time for process:--" + str(i + 1))
         arrival_time[i], burst_time[i] = map(int, input().split())
