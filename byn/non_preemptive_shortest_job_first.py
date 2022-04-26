@@ -74,7 +74,7 @@ def calculate_waitingtime(
 
     return waiting_time
 
-# Calculate the turn around time of each Processes
+# Calculate the turnaround time of each Processes
 def calculate_turnaroundtime(
     burst_time: list[int], no_of_processes: int, waiting_time: list[int]
 ) -> list[int]:
@@ -133,4 +133,4 @@ if __name__ == "__main__":
     print(result)
 
     print(f"\nAverage waiting time = {mean(waiting_time):.5f}")
-    print(f"Average turn around time = {mean(turn_around_time):.5f}")
+    print(f"Average turnaround time = {mean(turn_around_time):.5f}")
