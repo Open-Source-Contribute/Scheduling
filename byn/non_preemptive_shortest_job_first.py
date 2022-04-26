@@ -60,8 +60,8 @@ def calculate_waitingtime(
                 ready_process.append(i)
 
         if len(ready_process)>0:
+            target_process = ready_process[0]
             for i in ready_process:
-                target_process = ready_process[0]
                 if remaining_time[i] < remaining_time[target_process]:
                     target_process = i
             total_time += burst_time[target_process]
@@ -86,19 +86,33 @@ def calculate_turnaroundtime(
 
 
 if __name__ == "__main__":
-    print("Enter the number of processes you want to analyze. ")
-    no_of_processes = int(input())
-    burst_time = [0] * no_of_processes
-    arrival_time = [0] * no_of_processes
-    processes = list(range(1, no_of_processes + 1))
+    print("------------------------MENU------------------------\n1. Analyze of processes arriving at the same time.\n2. Analysis of processes arriving at different times.\n3. Analysis of processes by user input.\n----------------------------------------------------")
+    if int(input())==1:
+        no_of_processes = 4
+        burst_time = [2,5,3,7]
+        arrival_time = [0,0,0,0]
+        processes = list(range(1, 5))
 
-    """
-    Please note arrival time and burst
-    Please use spaces to separate times entered.
-    """
-    for i in range(no_of_processes):
-        print("Enter the arrival time and burst time for process:--" + str(i + 1))
-        arrival_time[i], burst_time[i] = map(int, input().split())
+    elif int(input())==2:
+        no_of_processes = 4
+        burst_time = [2, 5, 3, 7]
+        arrival_time = [2, 8, 7, 5]
+        processes = list(range(1, 5))
+
+    elif int(input())==3:
+        print("Enter the number of processes you want to analyze. ")
+        no_of_processes = int(input())
+        burst_time = [0] * no_of_processes
+        arrival_time = [0] * no_of_processes
+        processes = list(range(1, no_of_processes + 1))
+
+        """
+        Please note arrival time and burst
+        Please use spaces to separate times entered.
+        """
+        for i in range(no_of_processes):
+            print("Enter the arrival time and burst time for process:--" + str(i + 1))
+            arrival_time[i], burst_time[i] = map(int, input().split())
 
     waiting_time = calculate_waitingtime(arrival_time, burst_time, no_of_processes)
     turn_around_time = calculate_turnaroundtime(burst_time, no_of_processes, waiting_time)
