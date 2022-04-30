@@ -11,15 +11,25 @@ from __future__ import annotations
 import pandas as pd
 from statistics import mean
 
-# Calculate the waiting time of each processes
-"""
-   Arrival_time : 도착 시간을 담은 리스트
-   Burst_time : 수행시간
-   No_of_processes : 프로세스의 개수, the number of processes
-"""
+
 def calculate_waitingtime(
     arrival_time: list[int], burst_time: list[int], no_of_processes: int
 ) -> list[int]:
+    """
+    Calculate the waiting time of each processes
+    Arrival_time : 도착 시간을 담은 리스트
+    Burst_time : 수행시간
+    No_of_processes : 프로세스의 개수, the number of processes
+
+    Return: The waiting time for each process.
+    >>> calculate_waiting_times([0,1,2], [10, 5, 8], 3)
+    [0, 9, 13]
+    >>> calculate_waiting_times([1,2,2,4], [4, 6, 3, 1], 4)
+    [0, 6, 3, 0]
+    >>> calculate_waiting_times([0,0,0], [12, 2, 10],3)
+    [12, 0, 2]
+    """
+
     """
     waiting_time : 대기 시간
     remaining_time : 남은 수행 시간
@@ -74,10 +84,20 @@ def calculate_waitingtime(
 
     return waiting_time
 
-# Calculate the turnaround time of each Processes
 def calculate_turnaroundtime(
     burst_time: list[int], no_of_processes: int, waiting_time: list[int]
 ) -> list[int]:
+    """
+    Calculate the turnaround time of each Processes
+
+    Return: The turnaround time for each process.
+    >>> calculate_waiting_times([0,1,2], [10, 5, 8], 3)
+    [10, 14, 21]
+    >>> calculate_waiting_times([1,2,2,4], [4, 6, 3, 1], 4)
+    [4, 12, 6, 1]
+    >>> calculate_waiting_times([0,0,0], [12, 2, 10],3)
+    [24, 2, 12]
+    """
 
     turn_around_time = [0] * no_of_processes
     for i in range(no_of_processes):
@@ -87,19 +107,20 @@ def calculate_turnaroundtime(
 
 if __name__ == "__main__":
     print("------------------------MENU------------------------\n1. Analyze of processes arriving at the same time.\n2. Analysis of processes arriving at different times.\n3. Analysis of processes by user input.\n----------------------------------------------------")
-    if int(input())==1:
+
+    if int(input("Enter the number of the desired menu. ").strip())==1:
         no_of_processes = 4
         burst_time = [2,5,3,7]
         arrival_time = [0,0,0,0]
         processes = list(range(1, 5))
 
-    elif int(input())==2:
+    elif int(input("Enter the number of the desired menu. ").strip())==2:
         no_of_processes = 4
         burst_time = [2, 5, 3, 7]
         arrival_time = [2, 8, 7, 5]
         processes = list(range(1, 5))
 
-    elif int(input())==3:
+    elif int(input("Enter the number of the desired menu. ").strip())==3:
         print("Enter the number of processes you want to analyze. ")
         no_of_processes = int(input())
         burst_time = [0] * no_of_processes
