@@ -1,15 +1,15 @@
 import numpy as np
 class Process:
     def __init__(self, process_name: str, arrival_time: int, burst_time: int):
-        self.process_name = process_name 
-        self.arrival_time = arrival_time 
-        self.burst_time = burst_time         
-        self.waiting_time = 0 
-        self.turn_around_time = 0 
+        self.process_name = process_name
+        self.arrival_time = arrival_time
+        self.burst_time = burst_time
+        self.waiting_time = 0
+        self.turn_around_time = 0
 
 
 
-          
+
 def HRRN(process_list: list):
     act=process_list.copy()
     act.sort(key=lambda x: x.arrival_time)
@@ -50,4 +50,3 @@ if __name__ == "__main__":
 
     process_list=[p1, p2, p3, p4]
     HRRN(process_list)
-
