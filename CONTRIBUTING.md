@@ -79,7 +79,7 @@ pre-commit run --all-files --show-diff-on-failure
 ```
 
 - 파이썬 3.9+ 이상의 문법으로 사용 print("Hello") o vs print "Hello" x
-- `flake8 . --ignore=E203,W503 --maax-line-length=88`를 통과해야함
+- `flake8 . --ignore=E203,W503 --max-line-length=88`를 통과해야함
 
 ```bash
 python3 -m pip install flake8
