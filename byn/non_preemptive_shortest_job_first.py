@@ -15,11 +15,12 @@ from statistics import mean
 def calculate_waitingtime(
     arrival_time: list[int], burst_time: list[int], no_of_processes: int
 ) -> list[int]:
+    #Arrival_time : 도착 시간을 담은 리스트
+    #Burst_time : 수행시간
+    #No_of_processes : 프로세스의 개수, the number of processes
+    
     """
     Calculate the waiting time of each processes
-    Arrival_time : 도착 시간을 담은 리스트
-    Burst_time : 수행시간
-    No_of_processes : 프로세스의 개수, the number of processes
 
     Return: The waiting time for each process.
     >>> calculate_waiting_times([0,1,2], [10, 5, 8], 3)
@@ -30,10 +31,9 @@ def calculate_waitingtime(
     [12, 0, 2]
     """
 
-    """
-    waiting_time : 대기 시간
-    remaining_time : 남은 수행 시간
-    """
+    
+    #waiting_time : 대기 시간
+    #remaining_time : 남은 수행 시간
     waiting_time = [0] * no_of_processes
     remaining_time = [0] * no_of_processes
 
@@ -45,10 +45,8 @@ def calculate_waitingtime(
         remaining_time[i] = burst_time[i]
     ready_process = []
 
-    """
-    completed : 수행 완료된 프로세스의 수, The number of processes completed  
-    total_time : 프로세스와 무관하게 진행되는 시간
-    """
+    #completed : 수행 완료된 프로세스의 수, The number of processes completed  
+    #total_time : 프로세스와 무관하게 진행되는 시간
     completed = 0
     total_time = 0
 
@@ -106,38 +104,26 @@ def calculate_turnaroundtime(
 
 
 if __name__ == "__main__":
-    print("------------------------MENU------------------------\n1. Analyze of processes arriving at the same time.\n2. Analysis of processes arriving at different times.\n3. Analysis of processes by user input.\n----------------------------------------------------")
+    print("TEST CASE 01\n")
 
-    if int(input("Enter the number of the desired menu. ").strip())==1:
-        no_of_processes = 4
-        burst_time = [2,5,3,7]
-        arrival_time = [0,0,0,0]
-        processes = list(range(1, 5))
-
-    elif int(input("Enter the number of the desired menu. ").strip())==2:
-        no_of_processes = 4
-        burst_time = [2, 5, 3, 7]
-        arrival_time = [2, 8, 7, 5]
-        processes = list(range(1, 5))
-
-    elif int(input("Enter the number of the desired menu. ").strip())==3:
-        print("Enter the number of processes you want to analyze. ")
-        no_of_processes = int(input())
-        burst_time = [0] * no_of_processes
-        arrival_time = [0] * no_of_processes
-        processes = list(range(1, no_of_processes + 1))
-
-        """
-        Please note arrival time and burst
-        Please use spaces to separate times entered.
-        """
-        for i in range(no_of_processes):
-            print("Enter the arrival time and burst time for process:--" + str(i + 1))
-            arrival_time[i], burst_time[i] = map(int, input().split())
+    no_of_processes = 4
+    burst_time = [2,5,3,7]
+    arrival_time = [0,0,0,0]
+    processes = list(range(1, 5))
+    waiting_time = calculate_waitingtime(arrival_time, burst_time, no_of_processes)
+    turn_around_time = calculate_turnaroundtime(burst_time, no_of_processes, waiting_time)
+    
+    """
+    print("TEST CASE 02\n")
+    no_of_processes = 4
+    burst_time = [2, 5, 3, 7]
+    arrival_time = [2, 8, 7, 5]
+    processes = list(range(1, 5))
 
     waiting_time = calculate_waitingtime(arrival_time, burst_time, no_of_processes)
     turn_around_time = calculate_turnaroundtime(burst_time, no_of_processes, waiting_time)
-
+    """
+    
     result = pd.DataFrame(
         list(zip(processes, burst_time, arrival_time, waiting_time, turn_around_time)),
         columns=[
