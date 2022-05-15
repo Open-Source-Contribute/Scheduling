@@ -25,7 +25,7 @@ def calculate_waitingtime(
     >>> calculate_waitingtime([0,1,2], [10, 5, 8], 3)
     [0, 9, 13]
     >>> calculate_waitingtime([1,2,2,4], [4, 6, 3, 1], 4)
-    [0, 6, 3, 0]
+    [0, 7, 4, 1]
     >>> calculate_waitingtime([0,0,0], [12, 2, 10],3)
     [12, 0, 2]
     """
@@ -90,12 +90,12 @@ def calculate_turnaroundtime(
     Calculate the turnaround time of each Processes
 
     Return: The turnaround time for each process.
-    >>> calculate_turnaroundtime([0,1,2], [10, 5, 8], 3)
-    [10, 14, 21]
-    >>> calculate_turnaroundtime([1,2,2,4], [4, 6, 3, 1], 4)
-    [4, 12, 6, 1]
-    >>> calculate_turnaroundtime([0,0,0], [12, 2, 10],3)
-    [24, 2, 12]
+    >>> calculate_turnaroundtime([0,1,2], 3, [0, 10, 15])
+    [0, 11, 17]
+    >>> calculate_turnaroundtime([1,2,2,4], 4, [1, 8, 5, 4])
+    [2, 10, 7, 8]
+    >>> calculate_turnaroundtime([0,0,0], 3, [12, 0, 2])
+    [12, 0, 2]
     """
 
     turn_around_time = [0] * no_of_processes
