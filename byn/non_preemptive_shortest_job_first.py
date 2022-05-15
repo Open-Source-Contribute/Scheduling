@@ -1,7 +1,7 @@
 # SJF
 """
 Non-preemptive Shortest Job First
-An algorithm in which the process having the smallest execution time is chosen for the next execution.
+Shortest execution time process is chosen for the next execution.
 https://www.guru99.com/shortest-job-first-sjf-scheduling.html
 https://en.wikipedia.org/wiki/Shortest_job_next
 """
@@ -37,7 +37,7 @@ def calculate_waitingtime(
 
     """
     Initialize remaining_time to waiting_time.
-    남은 수행 시간을 수행 시간으로 초기화한다.  
+    남은 수행 시간을 수행 시간으로 초기화한다.
     """
     for i in range(no_of_processes):
         remaining_time[i] = burst_time[i]
@@ -49,12 +49,13 @@ def calculate_waitingtime(
     total_time = 0
 
     """
-    수행할 프로세스가 남아 있을 때, 
+    수행할 프로세스가 남아 있을 때,
         도착 시간이 지났고 남아 있는 수행 시간이 있는 프로세스는 ready_process에 들어간다.
-        ready_process에서 가장 짧은 프로세스인 target_process가 실행된다. 
+        ready_process에서 가장 짧은 프로세스인 target_process가 실행된다.
 
     When processes are not completed,
-        A process whose arrival time has passed and has remaining execution time is put into the ready_process.
+        A process whose arrival time has passed \
+        and has remaining execution time is put into the ready_process.
         The shortest process in the ready_process, target_process is executed.
     """
     while completed != no_of_processes:
@@ -73,8 +74,9 @@ def calculate_waitingtime(
             total_time += burst_time[target_process]
             completed += 1
             remaining_time[target_process] = 0
-
-            waiting_time[target_process] = total_time - arrival_time[target_process] - burst_time[target_process]
+            waiting_time[target_process] = \
+                total_time - arrival_time[target_process]\
+                - burst_time[target_process]
         else:
             total_time += 1
 
@@ -98,7 +100,8 @@ def calculate_turnaroundtime(
 
     turn_around_time = [0] * no_of_processes
     for i in range(no_of_processes):
-        turn_around_time[i] = burst_time[i] + waiting_time[i]
+        turn_around_time[i] = burst_time[i] \
+                              + waiting_time[i]
     return turn_around_time
 
 
@@ -109,19 +112,10 @@ if __name__ == "__main__":
     burst_time = [2, 5, 3, 7]
     arrival_time = [0, 0, 0, 0]
     processes = list(range(1, 5))
-    waiting_time = calculate_waitingtime(arrival_time, burst_time, no_of_processes)
-    turn_around_time = calculate_turnaroundtime(burst_time, no_of_processes, waiting_time)
-
-    """
-    print("[TEST CASE 02]")
-    no_of_processes = 4
-    burst_time = [2, 5, 3, 7]
-    arrival_time = [2, 8, 7, 5]
-    processes = list(range(1, 5))
-
-    waiting_time = calculate_waitingtime(arrival_time, burst_time, no_of_processes)
-    turn_around_time = calculate_turnaroundtime(burst_time, no_of_processes, waiting_time)
-    """
+    waiting_time = calculate_waitingtime(arrival_time,
+                                         burst_time, no_of_processes)
+    turn_around_time = calculate_turnaroundtime(burst_time,
+                                                no_of_processes, waiting_time)
 
     # Printing the Result
     print("PID\tBurst Time\tArrival Time\tWaiting Time\tTurnaround Time")
