@@ -2,6 +2,9 @@ from collections import deque
 
 
 class Process:
+    """
+    Process should have these fields below
+    """
     def __init__(self, process_name: str, arrival_time: int, burst_time: int) -> None:
         self.process_name = process_name  # process name
         self.arrival_time = arrival_time  # arrival time of the process
@@ -10,19 +13,15 @@ class Process:
         self.burst_time = burst_time  # remaining burst time
         self.waiting_time = 0  # total time of the process wait in ready queue
         self.turnaround_time = 0  # time from arrival time to completion time
-        self.complete = False
 
 
 class MLFQ:
     """
     MLFQ(Multi Level Feedback Queue)
-    Queue(0): RR(Round Robin, time_slice = time_slices[0])
-    Queue(1): RR(Round Robin, time_slice = time_slices[1])
-    ...
-    Queue(number_of_queues - 2):
-        RR(Round Robin, time_slice = time_slices[number_of_queues - 2])
-    Queue(number_of_queue - 1):
-        FCFS(First Come, First Served)
+    https://en.wikipedia.org/wiki/Multilevel_feedback_queue
+    This MLFQ has a lot of queue that has different priority
+    The first Queue(0) to last second Queue(N-2) of MLFQ has Round Robin Algorithm
+    The last Queue(N-1) has First Come, First Served Algorithm
     """
     def __init__(
         self,
@@ -119,7 +118,6 @@ class MLFQ:
             cp.turnaround_time = self.current_time - cp.arrival_time
             # set the completion time
             cp.stop_time = self.current_time
-            cp.complete = True
             # add the process to queue that has finished queue
             finished.append(cp)
         # FCFS will finish all remaining processes
@@ -162,7 +160,6 @@ class MLFQ:
                 cp.stop_time = self.current_time
                 # update the process' turnaround time because it is finished
                 cp.turnaround_time = self.current_time - cp.arrival_time
-                cp.complete = True
                 # add the process to queue that has finished queue
                 finished.append(cp)
 
@@ -202,6 +199,6 @@ if __name__ == "__main__":
 
     print(f" waiting time\t\t: {MLFQ.calculate_waiting_time([P1, P2, P3, P4])}")
     print(f" completion time\t: {MLFQ.calculate_completion_time([P1, P2, P3, P4])}")
-    print(f" turn around time\t: {MLFQ.calculate_turnaround_time([P1, P2, P3, P4])}")
+    print(f" turnaround time\t: {MLFQ.calculate_turnaround_time([P1, P2, P3, P4])}")
 
     print(f" sequnece of finished process: {mlfq.calculate_sequence_of_finish_queue()}")
